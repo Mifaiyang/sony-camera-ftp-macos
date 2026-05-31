@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sony Camera FTP macOS"
+  short_description: "Set up Sony camera Wi-Fi FTP transfer to Mac"
+  default_prompt: "Use $sony-camera-ftp-macos to configure Sony camera FTP auto transfer to my Mac."
