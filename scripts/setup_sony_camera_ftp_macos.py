@@ -7,6 +7,7 @@ import socket
 import subprocess
 import sys
 import textwrap
+import time
 from pathlib import Path
 
 
@@ -155,7 +156,7 @@ def make_inbox_link():
     PICTURES_LINK.symlink_to(INBOX)
 
 
-def verify(config):
+def verify_once(config):
     from ftplib import FTP
     from io import BytesIO
 
@@ -170,6 +171,20 @@ def verify(config):
     if ok:
         verify_file.unlink()
     return ok
+
+
+def verify(config, attempts=15, delay_seconds=1):
+    last_error = None
+    for _ in range(attempts):
+        try:
+            if verify_once(config):
+                return True
+        except Exception as exc:
+            last_error = exc
+        time.sleep(delay_seconds)
+    if last_error:
+        print(f"Verification error: {last_error}", file=sys.stderr)
+    return False
 
 
 def main():
